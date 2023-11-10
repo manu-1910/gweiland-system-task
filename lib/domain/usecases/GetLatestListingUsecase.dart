@@ -9,7 +9,7 @@ class GetLatestListingUsecase {
 
   GetLatestListingUsecase(this.repository);
 
-  Future<Either<CryptoListing, Failure>> execute() {
+  Future<Either<List<CryptoListing>, Failure>> execute() {
     return repository.getLatestListing();
   }
 }
