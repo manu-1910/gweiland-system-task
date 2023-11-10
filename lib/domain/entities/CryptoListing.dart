@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'dart:collection';
 import 'package:equatable/equatable.dart';
 
 class CryptoListing extends Equatable {
@@ -87,4 +86,14 @@ class Quote extends Equatable {
       required this.marketCap,
       required this.marketCapDominance,
       required this.lastUpdated});
+
+  factory Quote.fromJson(HashMap<String, dynamic> json) => Quote(
+      price: json["price"],
+      volume24hr: json["volume_24h"],
+      volume24hrChange: json["volume_change_24h"],
+      percentChange1Hr: json["percent_change_1h"],
+      percentChange24Hr: json["percent_change_24h"],
+      marketCap: json["market_cap"],
+      marketCapDominance: json["market_cap_dominance"],
+      lastUpdated: json["last_updated"]);
 }
