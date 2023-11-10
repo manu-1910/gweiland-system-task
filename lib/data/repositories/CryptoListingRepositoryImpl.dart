@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:gweiland_exchange/data/Failure.dart';
 import 'package:gweiland_exchange/data/ServerException.dart';
 import 'package:gweiland_exchange/data/datasources/RemoteDataSource.dart';
+import 'package:gweiland_exchange/domain/entities/CryptoInfo.dart';
 import 'package:gweiland_exchange/domain/entities/CryptoListing.dart';
 import 'package:gweiland_exchange/domain/repositories/CryptoRepository.dart';
 
@@ -17,6 +18,18 @@ class CryptoListingRepositoryImpl implements CryptoRepository {
     try {
       final result = await dataSource.getLatestListing();
       return Left(List<CryptoListing>.from(result.map((e) => e.toEntity())));
+    } on ServerException {
+      return const Right(ServerFailure("Fetch failed!!"));
+    } on SocketException {
+      return const Right(ConnectionFailure("Internet connection issue!!"));
+    }
+  }
+
+  @override
+  Future<Either<CryptoInfo, Failure>> getCryptoInfo(int id) async {
+    try {
+      final result = await dataSource.getLogoOfCurrencyWithId(id);
+      return Left(result.toEntity());
     } on ServerException {
       return const Right(ServerFailure("Fetch failed!!"));
     } on SocketException {

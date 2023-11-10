@@ -87,5 +87,6 @@ class CryptoListingModel extends Equatable {
       dateAdded: dateAdded,
       tags: tags,
       platform: platform,
-      quote: quote);
+      quote: quote,
+      logo: "");
 }

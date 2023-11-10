@@ -18,7 +18,8 @@ class CryptoListing extends Equatable {
         dateAdded,
         tags,
         platform,
-        quote
+        quote,
+        logo
       ];
 
   final int id;
@@ -36,6 +37,7 @@ class CryptoListing extends Equatable {
   final List<String> tags;
   final String platform;
   final Map<String, Quote> quote;
+  final String logo;
 
   const CryptoListing(
       {required this.id,
@@ -52,7 +54,8 @@ class CryptoListing extends Equatable {
       required this.dateAdded,
       required this.tags,
       required this.platform,
-      required this.quote});
+      required this.quote,
+      required this.logo});
 }
 
 class Quote extends Equatable {
