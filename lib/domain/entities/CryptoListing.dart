@@ -37,9 +37,9 @@ class CryptoListing extends Equatable {
   final List<String> tags;
   final String platform;
   final Map<String, Quote> quote;
-  final String logo;
+  String logo;
 
-  const CryptoListing(
+  CryptoListing(
       {required this.id,
       required this.name,
       required this.symbol,
