@@ -13,11 +13,12 @@ abstract class RemoteDataSource {
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   final Dio dioClient;
-  RemoteDataSourceImpl({required this.dioClient});
+  RemoteDataSourceImpl(this.dioClient);
 
   @override
   Future<List<CryptoListingModel>> getLatestListing() async {
     final response = await dioClient.get(Config.baseUrl + Config.latest);
+    print(response);
     if (response.statusCode == 200) {
       Iterable result = json.decode(response.data)["data"];
       return List<CryptoListingModel>.from(
@@ -29,7 +30,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<CryptoInfoModel> getLogoOfCurrencyWithId(int id) async {
-    final response = await dioClient.get(Config.baseUrl + Config.info);
+    final response =
+        await dioClient.get("${Config.baseUrl}${Config.info}&id=$id");
     if (response.statusCode == 200) {
       return CryptoInfoModel.fromJson(
           json.decode(response.data)["data"][id.toString()]);

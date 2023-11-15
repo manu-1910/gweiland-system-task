@@ -1,5 +1,5 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gweiland_exchange/domain/entities/CryptoInfo.dart';
 import 'package:gweiland_exchange/domain/entities/CryptoListing.dart';
 import 'package:gweiland_exchange/domain/usecases/GetCryptoInfoUsecase.dart';
 import 'package:gweiland_exchange/domain/usecases/GetLatestListingUsecase.dart';
@@ -13,6 +13,7 @@ class CryptoBloc extends Bloc<CryptoEvent, LoadState> {
   CryptoBloc(this.getLatestListingUsecase, this.getCryptoInfoUsecase)
       : super(EmptyState()) {
     on<FetchNextCryptosList>((event, emit) async {
+      print("Fetch started!!");
       emit(LoadingState());
       final result = await getLatestListingUsecase.execute();
       List<CryptoListing> cryptos = List.empty();
@@ -23,8 +24,12 @@ class CryptoBloc extends Bloc<CryptoEvent, LoadState> {
               (failure) => {element.logo = ""});
           cryptos.add(element);
         });
+        cryptos.forEach((element) {
+          print(element);
+        });
         emit(LoadedData(cryptos));
       }, (failure) {
+        print("Fetch failed : ${failure.message}");
         emit(LoadError(failure.message));
       });
     });
