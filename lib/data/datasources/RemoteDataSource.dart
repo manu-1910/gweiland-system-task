@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gweiland_exchange/data/ServerException.dart';
 import 'package:gweiland_exchange/data/config.dart';
 import 'package:gweiland_exchange/data/models/CryptoInfoModel.dart';
@@ -17,8 +18,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<List<CryptoListingModel>> getLatestListing() async {
-    final response = await dioClient.get(Config.baseUrl + Config.latest);
-    print(response);
+    debugPrint(Config.baseUrl + Config.latest);
+    final response = await dioClient.get(Config.baseUrl + Config.latest, options: Options(responseType: ResponseType.plain));
+    debugPrint(response.statusCode.toString());
+    debugPrint(response.data);
     if (response.statusCode == 200) {
       Iterable result = json.decode(response.data)["data"];
       return List<CryptoListingModel>.from(
@@ -30,8 +33,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<CryptoInfoModel> getLogoOfCurrencyWithId(int id) async {
+    debugPrint("${Config.baseUrl}${Config.info}&id=$id");
     final response =
-        await dioClient.get("${Config.baseUrl}${Config.info}&id=$id");
+        await dioClient.get("${Config.baseUrl}${Config.info}&id=$id", options: Options(responseType: ResponseType.plain));
+    debugPrint(response.statusCode.toString());
+    debugPrint(response.data);
     if (response.statusCode == 200) {
       return CryptoInfoModel.fromJson(
           json.decode(response.data)["data"][id.toString()]);
