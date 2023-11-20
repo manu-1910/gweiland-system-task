@@ -11,7 +11,7 @@ class CryptoInfoModel extends Equatable {
 
   const CryptoInfoModel({required this.logo});
 
-  factory CryptoInfoModel.fromJson(HashMap<String, dynamic> json) =>
+  factory CryptoInfoModel.fromJson(json) =>
       CryptoInfoModel(logo: json["logo"]);
 
   CryptoInfo toEntity() => CryptoInfo(logo: logo);

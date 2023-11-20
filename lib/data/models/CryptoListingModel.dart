@@ -8,9 +8,9 @@ class CryptoListingModel extends Equatable {
   final String slug;
   final int cmcRank;
   final int numMarketPairs;
-  final int circulatingSupply;
-  final int totalSupply;
-  final int maxSupply;
+  final double? circulatingSupply;
+  final double? totalSupply;
+  final double? maxSupply;
   final bool infiniteSupply;
   final String lastUpdated;
   final String dateAdded;
@@ -62,15 +62,15 @@ class CryptoListingModel extends Equatable {
           slug: json["slug"],
           cmcRank: json["cmc_rank"],
           numMarketPairs: json["num_market_pairs"],
-          circulatingSupply: json["circulating_supply"],
-          totalSupply: json["total_supply"],
-          maxSupply: json["max_supply"],
+          circulatingSupply: (json["circulating_supply"] ?? 0).toDouble(),
+          totalSupply: (json["total_supply"] ?? 0).toDouble(),
+          maxSupply: (json["max_supply"] ?? 0).toDouble(),
           infiniteSupply: json["infinite_supply"],
           lastUpdated: json["last_updated"],
           dateAdded: json["date_added"],
-          tags: json["tags"],
-          platform: json["platform"],
-          quote: {"USD": json["quote"]["USD"], "BTC": json["quote"]["BTC"]});
+          tags: List.empty(),
+          platform: (json["platform"] ?? "").toString(),
+          quote: {"USD": Quote.fromJson(json["quote"]["USD"]), "BTC": Quote.fromJson(json["quote"]["BTC"] ?? {})});
 
   CryptoListing toEntity() => CryptoListing(
       id: id,
@@ -79,9 +79,9 @@ class CryptoListingModel extends Equatable {
       slug: slug,
       cmcRank: cmcRank,
       numMarketPairs: numMarketPairs,
-      circulatingSupply: circulatingSupply,
-      totalSupply: totalSupply,
-      maxSupply: maxSupply,
+      circulatingSupply: circulatingSupply ?? 0.0,
+      totalSupply: totalSupply ?? 0.0,
+      maxSupply: maxSupply ?? 0.0,
       infiniteSupply: infiniteSupply,
       lastUpdated: lastUpdated,
       dateAdded: dateAdded,

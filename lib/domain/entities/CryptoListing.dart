@@ -28,9 +28,9 @@ class CryptoListing extends Equatable {
   final String slug;
   final int cmcRank;
   final int numMarketPairs;
-  final int circulatingSupply;
-  final int totalSupply;
-  final int maxSupply;
+  final double circulatingSupply;
+  final double totalSupply;
+  final double maxSupply;
   final bool infiniteSupply;
   final String lastUpdated;
   final String dateAdded;
@@ -59,13 +59,13 @@ class CryptoListing extends Equatable {
 }
 
 class Quote extends Equatable {
-  final int price;
-  final String volume24hr;
-  final String volume24hrChange;
-  final String percentChange1Hr;
-  final String percentChange24Hr;
-  final int marketCap;
-  final int marketCapDominance;
+  final double price;
+  final double volume24hr;
+  final double volume24hrChange;
+  final double percentChange1Hr;
+  final double percentChange24Hr;
+  final double marketCap;
+  final double marketCapDominance;
   final String lastUpdated;
 
   @override
@@ -90,13 +90,13 @@ class Quote extends Equatable {
       required this.marketCapDominance,
       required this.lastUpdated});
 
-  factory Quote.fromJson(HashMap<String, dynamic> json) => Quote(
-      price: json["price"],
-      volume24hr: json["volume_24h"],
-      volume24hrChange: json["volume_change_24h"],
-      percentChange1Hr: json["percent_change_1h"],
-      percentChange24Hr: json["percent_change_24h"],
-      marketCap: json["market_cap"],
-      marketCapDominance: json["market_cap_dominance"],
-      lastUpdated: json["last_updated"]);
+  factory Quote.fromJson(json) => Quote(
+      price: json["price"] ?? 0.0,
+      volume24hr: json["volume_24h"] ?? 0.0,
+      volume24hrChange: (json["volume_change_24h"] ?? 0.0).toDouble(),
+      percentChange1Hr: (json["percent_change_1h"] ?? 0.0).toDouble(),
+      percentChange24Hr: (json["percent_change_24h"] ?? 0.0).toDouble(),
+      marketCap: (json["market_cap"] ?? 0.0).toDouble(),
+      marketCapDominance: (json["market_cap_dominance"] ?? 0.0).toDouble(),
+      lastUpdated: json["last_updated"] ?? "");
 }
