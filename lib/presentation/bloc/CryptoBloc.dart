@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gweiland_exchange/domain/entities/CryptoListing.dart';
 import 'package:gweiland_exchange/domain/usecases/GetCryptoInfoUsecase.dart';
@@ -13,25 +14,27 @@ class CryptoBloc extends Bloc<CryptoEvent, LoadState> {
   CryptoBloc(this.getLatestListingUsecase, this.getCryptoInfoUsecase)
       : super(EmptyState()) {
     on<FetchNextCryptosList>((event, emit) async {
-      print("Fetch started!!");
+      debugPrint("Fetch started!!");
       emit(LoadingState());
       final result = await getLatestListingUsecase.execute();
-      List<CryptoListing> cryptos = List.empty();
-      result.fold((data) {
-        data.forEach((element) async {
-          final inforesult = await getCryptoInfoUsecase.execute(element.id);
-          inforesult.fold((info) => {element.logo = info.logo},
-              (failure) => {element.logo = ""});
-          cryptos.add(element);
+      List<CryptoListing> cryptos = [];
+      result.fold((data) async {
+        Future loop = Future.forEach<CryptoListing>(data, (item) async {
+          final inforesult = await getCryptoInfoUsecase.execute(item.id);
+          inforesult.fold((info) => {item.logo = info.logo},
+                  (failure) => {item.logo = ""});
+          cryptos.add(item);
         });
-        cryptos.forEach((element) {
-          print(element);
-        });
-        emit(LoadedData(cryptos));
+        await loop.whenComplete(() => add(CryptoListFetched(cryptos)));
       }, (failure) {
-        print("Fetch failed : ${failure.message}");
+        debugPrint("Fetch failed : ${failure.message}");
         emit(LoadError(failure.message));
       });
     });
+
+    on<CryptoListFetched>((event, emit){
+      emit(LoadedData(event.listing));
+    });
   }
+
 }
